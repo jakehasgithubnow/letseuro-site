@@ -1,5 +1,10 @@
 import { sanity } from '@/lib/sanity'
 import { PortableText } from '@portabletext/react'
+import { Metadata } from 'next'
+
+type Params = {
+  slug: string
+}
 
 export async function generateStaticParams() {
   const slugs = await sanity.fetch(`*[_type == "toolPage"]{ slug }`)
@@ -20,7 +25,8 @@ async function getData(slug: string) {
   return await sanity.fetch(query, { slug })
 }
 
-export default async function ToolPage({ params }: { params: { slug: string } }) {
+// ✅ FIX HERE: properly type the component props
+export default async function ToolPage({ params }: { params: Params }) {
   const data = await getData(params.slug)
 
   return (
