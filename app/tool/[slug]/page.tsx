@@ -1,13 +1,5 @@
 import { sanity } from '@/lib/sanity'
 import { PortableText } from '@portabletext/react'
-import { Metadata } from 'next'
-
-// 👇 use Next.js-provided type
-type Props = {
-  params: {
-    slug: string
-  }
-}
 
 export async function generateStaticParams() {
   const slugs = await sanity.fetch(`*[_type == "toolPage"]{ slug }`)
@@ -28,7 +20,7 @@ async function getData(slug: string) {
   return await sanity.fetch(query, { slug })
 }
 
-export default async function ToolPage({ params }: Props) {
+export default async function ToolPage({ params }: any) {
   const data = await getData(params.slug)
 
   return (
