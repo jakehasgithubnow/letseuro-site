@@ -25,7 +25,7 @@ async function getData(slug: string) {
   return await sanity.fetch(query, { slug })
 }
 
-export default async function ToolPage({ params }: { params: { slug: string } }) {
+exexport default async function ToolPage({ params }: any){
   const data = await getData(params.slug)
 
   return (
