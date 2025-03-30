@@ -24,8 +24,7 @@ async function getData(slug: string) {
 
   return await sanity.fetch(query, { slug })
 }
-
-exexport default async function ToolPage({ params }: any){
+export default async function ToolPage({ params }: any){
   const data = await getData(params.slug)
 
   return (
@@ -34,7 +33,7 @@ exexport default async function ToolPage({ params }: any){
       <div className="grid md:grid-cols-2 gap-12 items-center">
         <div>
           <h1 className="text-4xl font-bold mb-4">{data.title}</h1>
-          <p className="text-lg mb-6">{data.description}</p>
+          <p className="text-lg mb-6">{data.description}</p>ß
 
           <div className="flex flex-col sm:flex-row gap-4">
             <a
