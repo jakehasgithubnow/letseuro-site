@@ -1,8 +1,16 @@
 import { sanity } from '@/lib/sanity'
 import { PortableText } from '@portabletext/react'
 import imageUrlBuilder from '@sanity/image-url'
+import { createClient } from 'next-sanity'
 
-const builder = imageUrlBuilder(sanity)
+const config = {
+  projectId: 'kabpbxao', // 🔁 REPLACE THIS
+  dataset: 'production',
+  useCdn: true,
+  apiVersion: '2023-01-01',
+}
+
+const builder = imageUrlBuilder(createClient(config))
 const urlFor = (source: any) => builder.image(source)
 
 export async function generateStaticParams() {
