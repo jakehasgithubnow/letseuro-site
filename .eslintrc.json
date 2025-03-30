@@ -1,6 +1,3 @@
-{
-    "extends": "next/core-web-vitals",
-    "rules": {
-      "@typescript-eslint/no-explicit-any": "off"
-    }
-  }
+git add .eslintrc.json
+git commit -m "Disable no-explicit-any rule for build"
+git push
