@@ -4,7 +4,7 @@ import imageUrlBuilder from '@sanity/image-url'
 import { createClient } from 'next-sanity'
 
 const config = {
-  projectId: 'kabpbxao', // ← replace with your actual project ID
+  projectId: 'kabpbxao',
   dataset: 'production',
   useCdn: true,
   apiVersion: '2023-01-01',
@@ -19,28 +19,40 @@ export async function generateStaticParams() {
 }
 
 async function getData(slug: string) {
-  const query = `*[_type == "toolPage" && slug.current == $slug][0]{
-    title,
-    description,
-    heroImage,
-    toolSpecificSections,
-    enableGlobalSections,
-    "testimonials": *[_type == "testimonial"]{quote, author},
-    "faqs": *[_type == "faq"]{question, answer},
-    "cta": *[_type == "ctaBlock"][0]
+  const query = `{
+    "tool": *[_type == "toolPage" && slug.current == $slug][0]{
+      title,
+      description,
+      heroImage,
+      toolSpecificSections,
+      enableGlobalSections,
+      "testimonials": *[_type == "testimonial"]{quote, author},
+      "faqs": *[_type == "faq"]{question, answer},
+      "cta": *[_type == "ctaBlock"][0]
+    },
+    "logo": *[_type == "siteSettings"][0].logo
   }`
-
   return await sanity.fetch(query, { slug })
 }
 
 export default async function ToolPage({ params }: any) {
-  const data = await getData(params.slug)
+  const { tool: data, logo } = await getData(params.slug)
 
   return (
-    <>
-      {/* Sticky nav */}
-      <header className="w-full border-b py-4 px-6 flex items-center justify-between bg-white text-black sticky top-0 z-50">
-        <div className="text-lg font-bold">Letseuro</div>
+    <div className="bg-white text-black">
+      {/* Nav */}
+      <header className="w-full border-b py-4 px-6 flex items-center justify-between sticky top-0 z-50 bg-white">
+        <div className="text-lg font-bold flex items-center gap-2">
+          {logo?.asset ? (
+            <img
+              src={urlFor(logo).height(40).url()}
+              alt="Letseuro"
+              className="h-10 object-contain"
+            />
+          ) : (
+            'Letseuro'
+          )}
+        </div>
         <nav className="flex gap-6 text-sm items-center">
           <a href="#" className="hover:underline">Contact Sales</a>
           <a href="#" className="hover:underline">Sign in</a>
@@ -53,16 +65,14 @@ export default async function ToolPage({ params }: any) {
         </nav>
       </header>
 
-      {/* Page content */}
-      <main className="bg-white text-black px-6 py-16 max-w-7xl mx-auto">
-        {/* Hero Section */}
+      {/* Hero Section */}
+      <main className="px-6 py-24 max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
             <h1 className="text-4xl font-bold mb-2">{data.title}</h1>
             <h3 className="text-xl font-medium text-gray-700 mb-6">
               Everything you ever wanted to know about {data.title.toLowerCase()}… but analytics never told you.
             </h3>
-
             <div className="flex flex-col sm:flex-row gap-4">
               <a
                 href="https://letseuro.com/signup"
@@ -78,7 +88,6 @@ export default async function ToolPage({ params }: any) {
               </a>
             </div>
           </div>
-
           <div>
             {data.heroImage?.asset ? (
               <img
@@ -93,58 +102,47 @@ export default async function ToolPage({ params }: any) {
             )}
           </div>
         </div>
+      </main>
 
-        {/* Spacer */}
-        <div className="h-16" />
+      {/* Features Section (hardcoded) */}
+      <section className="bg-gray-50 py-20 px-6">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="text-3xl font-semibold mb-8">Why teams love {data.title}</h2>
+          <div className="grid md:grid-cols-3 gap-8 text-left">
+            <div>
+              <h4 className="font-bold mb-2">Instant insights</h4>
+              <p>See real-time user behavior to make smarter decisions, faster.</p>
+            </div>
+            <div>
+              <h4 className="font-bold mb-2">Effortless setup</h4>
+              <p>Drop in a single line of code and start learning within minutes.</p>
+            </div>
+            <div>
+              <h4 className="font-bold mb-2">Privacy-first</h4>
+              <p>Fully GDPR-compliant with built-in anonymization features.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        {/* Tool-specific content */}
+      {/* Tool-specific content */}
+      <section className="px-6 py-16 max-w-5xl mx-auto">
         <div className="prose prose-lg max-w-none">
           <PortableText value={data.toolSpecificSections} />
         </div>
+      </section>
 
-        {/* Testimonials */}
-        {data.enableGlobalSections?.showTestimonials && (
-          <section className="mt-20">
-            <h2 className="text-2xl font-semibold mb-6">Testimonials</h2>
-            <div className="space-y-4">
-              {data.testimonials.map((t: any, i: number) => (
-                <blockquote key={i} className="border-l-4 pl-4 italic text-gray-700">
-                  <p>“{t.quote}”</p>
-                  <footer className="text-sm mt-1 text-gray-500">— {t.author}</footer>
-                </blockquote>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* FAQs */}
-        {data.enableGlobalSections?.showFAQs && (
-          <section className="mt-20">
-            <h2 className="text-2xl font-semibold mb-6">FAQs</h2>
-            <div className="space-y-6">
-              {data.faqs.map((f: any, i: number) => (
-                <div key={i}>
-                  <h3 className="font-semibold">{f.question}</h3>
-                  <p>{f.answer}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* CTA */}
-        {data.enableGlobalSections?.showCTA && data.cta && (
-          <section className="mt-20 bg-blue-100 p-8 rounded-lg text-center">
-            <h3 className="text-xl font-semibold mb-4">{data.cta.heading}</h3>
-            <a
-              href={data.cta.buttonUrl}
-              className="inline-block bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700"
-            >
-              {data.cta.buttonText}
-            </a>
-          </section>
-        )}
-      </main>
-    </>
+      {/* Final CTA */}
+      <section className="bg-blue-600 text-white text-center py-20 px-6">
+        <h2 className="text-3xl font-bold mb-4">Start exploring your visitors' behavior today</h2>
+        <p className="mb-6 text-lg">Try {data.title} free for 14 days — no credit card required.</p>
+        <a
+          href="https://letseuro.com/signup"
+          className="inline-block bg-white text-blue-600 px-6 py-3 rounded font-semibold hover:bg-gray-100"
+        >
+          Get started
+        </a>
+      </section>
+    </div>
   )
 }
