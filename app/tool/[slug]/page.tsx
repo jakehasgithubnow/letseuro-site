@@ -111,7 +111,7 @@ export default async function ToolPage({ params }: any) {
         </div>
       </section>
 
-      {/* Features (hardcoded for now) */}
+      {/* Features */}
       <section className="py-20 px-6 max-w-7xl mx-auto">
         <h2 className="text-3xl font-semibold text-center mb-12">Why teams love {data.title}</h2>
         <div className="grid md:grid-cols-3 gap-8">
@@ -127,6 +127,13 @@ export default async function ToolPage({ params }: any) {
         </div>
       </section>
 
+      {/* Tool-Specific Content */}
+      <section className="px-6 py-20 max-w-5xl mx-auto">
+        <div className="prose prose-lg max-w-none">
+          <PortableText value={data.toolSpecificSections} />
+        </div>
+      </section>
+
       {/* EU Benefits */}
       <section className="py-20 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
         <div>
@@ -137,13 +144,6 @@ export default async function ToolPage({ params }: any) {
           {siteSettings.euBenefitsImage && (
             <img src={urlFor(siteSettings.euBenefitsImage).width(600).url()} alt="" className="rounded-xl w-full" />
           )}
-        </div>
-      </section>
-
-      {/* Tool-Specific Content */}
-      <section className="px-6 py-20 max-w-5xl mx-auto">
-        <div className="prose prose-lg max-w-none">
-          <PortableText value={data.toolSpecificSections} />
         </div>
       </section>
 
