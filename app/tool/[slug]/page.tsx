@@ -34,21 +34,28 @@ async function getData(slug: string) {
       "faqs": *[_type == "faq"]{question, answer},
       "cta": *[_type == "ctaBlock"][0]
     },
-    "logo": *[_type == "siteSettings"][0].logo.asset->url
+    "siteSettings": *[_type == "siteSettings"][0]{
+      logo,
+      partnerLogos,
+      euBenefitsHeadline,
+      euBenefitsParagraph,
+      euBenefitsImage,
+      footerColumns
+    }
   }`
   return await sanity.fetch(query, { slug })
 }
 
 export default async function ToolPage({ params }: any) {
-  const { tool: data, logo } = await getData(params.slug)
+  const { tool: data, siteSettings } = await getData(params.slug)
 
   return (
     <div className="bg-white text-black">
       {/* Header */}
       <header className="w-full border-b px-6 py-4 flex justify-between items-center sticky top-0 bg-white z-50">
         <div className="flex items-center gap-2">
-          {logo ? (
-            <img src={logo} alt="Logo" className="h-10 object-contain" />
+          {siteSettings.logo ? (
+            <img src={siteSettings.logo} alt="Logo" className="h-10 object-contain" />
           ) : (
             <span className="text-lg font-bold">Letseuro</span>
           )}
@@ -89,12 +96,17 @@ export default async function ToolPage({ params }: any) {
         </div>
       </section>
 
-      {/* Logos (placeholder) */}
+      {/* Logos */}
       <section className="bg-white py-10 px-6 text-center border-y">
         <p className="text-gray-500 mb-6">Trusted by leading teams across Europe</p>
         <div className="flex justify-center gap-8 flex-wrap opacity-60">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="w-32 h-12 bg-gray-100 rounded" />
+          {siteSettings.partnerLogos?.map((logo: any, i: number) => (
+            <img
+              key={i}
+              src={urlFor(logo).width(160).url()}
+              alt=""
+              className="h-12 object-contain"
+            />
           ))}
         </div>
       </section>
@@ -115,6 +127,19 @@ export default async function ToolPage({ params }: any) {
         </div>
       </section>
 
+      {/* EU Benefits */}
+      <section className="py-20 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 className="text-3xl font-semibold mb-4">{siteSettings.euBenefitsHeadline}</h2>
+          <p className="text-lg text-gray-700">{siteSettings.euBenefitsParagraph}</p>
+        </div>
+        <div>
+          {siteSettings.euBenefitsImage && (
+            <img src={urlFor(siteSettings.euBenefitsImage).width(600).url()} alt="" className="rounded-xl w-full" />
+          )}
+        </div>
+      </section>
+
       {/* Tool-Specific Content */}
       <section className="px-6 py-20 max-w-5xl mx-auto">
         <div className="prose prose-lg max-w-none">
@@ -130,6 +155,17 @@ export default async function ToolPage({ params }: any) {
           {data.ctaLabel || 'Get started'}
         </a>
       </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-100 text-sm px-6 py-12">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+          {siteSettings.footerColumns?.map((column: any, i: number) => (
+            <div key={i} className="prose prose-sm text-gray-700">
+              <PortableText value={[column]} />
+            </div>
+          ))}
+        </div>
+      </footer>
     </div>
   )
 }
