@@ -48,7 +48,7 @@ export default async function ToolPage({ params }: any) {
       {/* Nav */}
       <header className="w-full border-b py-4 px-6 flex items-center justify-between sticky top-0 z-50 bg-white">
         <div className="text-lg font-bold flex items-center gap-2">
-          {logo?.asset?._ref ? (
+          {logo?.asset?.url ? (
             <img
               src={logo.asset.url}
               alt="Letseuro"
