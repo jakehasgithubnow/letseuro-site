@@ -50,7 +50,7 @@ export default async function ToolPage({ params }: any) {
         <div className="text-lg font-bold flex items-center gap-2">
           {logo?.asset?._ref ? (
             <img
-              src={urlFor(logo.asset).height(40).url()}
+              src={logo.asset.url}
               alt="Letseuro"
               className="h-10 object-contain"
             />
