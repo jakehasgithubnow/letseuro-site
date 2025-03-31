@@ -38,8 +38,6 @@ async function getData(slug: string) {
         headline,
         cta->
       },
-      "testimonials": *[_type == "testimonial"]{quote, author},
-      "faqs": *[_type == "faq"]{question, answer},
       "cta": *[_type == "ctaBlock"][0]
     },
     "siteSettings": *[_type == "siteSettings"][0]{
@@ -77,7 +75,7 @@ export default async function ToolPage({ params }: any) {
         <div className="flex items-center gap-2">
           {siteSettings.logo?.asset ? (
             <img 
-              src={urlFor(siteSettings.logo).width(150).url()} 
+              src={siteSettings.logo.asset.url} 
               alt="Logo" 
               className="h-10 object-contain" 
             />
@@ -99,7 +97,7 @@ export default async function ToolPage({ params }: any) {
         <div>
           <h1 className="text-5xl font-bold mb-4">{data.title}</h1>
           <p className="text-lg text-gray-700 mb-6">
-            {data.introParagraph || `Everything you ever wanted to know about ${data.title.toLowerCase()}… but analytics never told you.`}
+            {data.introParagraph || `Everything you ever wanted to know about ${data.title?.toLowerCase()}… but analytics never told you.`}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <a href="/signup" className="bg-blue-600 text-white px-6 py-3 rounded font-semibold text-center">
@@ -118,7 +116,7 @@ export default async function ToolPage({ params }: any) {
               className="rounded-xl w-full" 
             />
           ) : (
-            <div className="bg-peach-200 rounded-xl aspect-[16/10] flex items-center justify-center text-gray-400">
+            <div className="bg-orange-100 rounded-xl aspect-[16/10] flex items-center justify-center text-gray-400">
               [Hero image placeholder]
             </div>
           )}
@@ -129,10 +127,10 @@ export default async function ToolPage({ params }: any) {
       <section className="bg-white py-10 px-6 text-center border-y">
         <p className="text-gray-500 mb-6">{globalSections?.logoSliderText || 'Trusted by leading teams across Europe'}</p>
         <div className="flex justify-center gap-8 flex-wrap opacity-60">
-          {(globalSections?.logos || siteSettings.partnerLogos)?.map((logo: any, i: number) => (
+          {(globalSections?.logos || siteSettings.partnerLogos || []).map((logo, i) => (
             <div 
               key={i} 
-              className="h-12 w-32 bg-peach-100 rounded-md flex items-center justify-center"
+              className="h-12 w-32 bg-orange-100 rounded-md flex items-center justify-center"
             >
               {logo?.asset ? (
                 <img
@@ -152,9 +150,9 @@ export default async function ToolPage({ params }: any) {
       <section className="py-20 px-6 max-w-7xl mx-auto">
         <h2 className="text-3xl font-semibold text-center mb-12">Why teams love {data.title}</h2>
         <div className="grid md:grid-cols-3 gap-8">
-          {(data.featureSections || []).map((feature: any, index: number) => (
+          {(data.featureSections || []).map((feature, index) => (
             <div key={index} className="flex flex-col items-start">
-              <div className="w-full h-48 bg-peach-100 rounded-3xl mb-4 flex items-center justify-center">
+              <div className="w-full h-48 bg-orange-100 rounded-3xl mb-4 flex items-center justify-center">
                 {feature.image?.asset ? (
                   <img 
                     src={urlFor(feature.image).width(300).height(200).url()} 
@@ -189,7 +187,7 @@ export default async function ToolPage({ params }: any) {
                 </tr>
               </thead>
               <tbody>
-                {(data.comparisonTable.rows || []).map((row: any, index: number) => (
+                {(data.comparisonTable.rows || []).map((row, index) => (
                   <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : ''}>
                     <td className="p-4 border">{row.feature}</td>
                     <td className="p-4 text-center border">{row.toolValue}</td>
@@ -225,7 +223,7 @@ export default async function ToolPage({ params }: any) {
             {globalSections?.euBenefits?.paragraph || siteSettings.euBenefitsParagraph || 'Our solution offers specific benefits for European businesses.'}
           </p>
         </div>
-        <div className="bg-peach-100 rounded-3xl overflow-hidden aspect-square">
+        <div className="bg-orange-100 rounded-3xl overflow-hidden aspect-square">
           {(globalSections?.euBenefits?.image || siteSettings.euBenefitsImage)?.asset ? (
             <img 
               src={urlFor(globalSections?.euBenefits?.image || siteSettings.euBenefitsImage).width(600).url()} 
@@ -260,7 +258,7 @@ export default async function ToolPage({ params }: any) {
           <div className="flex justify-between items-center mb-12">
             {siteSettings.logo?.asset ? (
               <img 
-                src={urlFor(siteSettings.logo).width(150).url()} 
+                src={siteSettings.logo.asset.url} 
                 alt="Logo" 
                 className="h-10 object-contain" 
               />
@@ -270,12 +268,12 @@ export default async function ToolPage({ params }: any) {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {(globalSections?.footerColumns || siteSettings.footerColumns || []).map((column: any, i: number) => (
+            {(globalSections?.footerColumns || siteSettings.footerColumns || []).map((column, i) => (
               <div key={i} className="prose prose-sm text-gray-700">
                 {column.title && <h3 className="font-semibold mb-3">{column.title}</h3>}
                 {column.items && Array.isArray(column.items) ? (
                   <ul className="space-y-2">
-                    {column.items.map((item: string, idx: number) => (
+                    {column.items.map((item, idx) => (
                       <li key={idx}><a href="#" className="hover:underline">{item}</a></li>
                     ))}
                   </ul>
