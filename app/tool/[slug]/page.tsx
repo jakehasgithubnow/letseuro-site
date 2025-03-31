@@ -30,7 +30,12 @@ async function getData(slug: string) {
       "faqs": *[_type == "faq"]{question, answer},
       "cta": *[_type == "ctaBlock"][0]
     },
-    "logo": *[_type == "siteSettings"][0].logo
+    "logo": *[_type == "siteSettings"][0].logo{
+      asset->{
+        _id,
+        url
+      }
+    }
   }`
   return await sanity.fetch(query, { slug })
 }
@@ -43,14 +48,14 @@ export default async function ToolPage({ params }: any) {
       {/* Nav */}
       <header className="w-full border-b py-4 px-6 flex items-center justify-between sticky top-0 z-50 bg-white">
         <div className="text-lg font-bold flex items-center gap-2">
-          {logo?.asset ? (
+          {logo?.asset?._ref ? (
             <img
               src={urlFor(logo).height(40).url()}
               alt="Letseuro"
               className="h-10 object-contain"
             />
           ) : (
-            'Letseuro'
+            <span className="font-bold text-lg">Letseuro</span>
           )}
         </div>
         <nav className="flex gap-6 text-sm items-center">
