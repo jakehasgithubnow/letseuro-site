@@ -38,7 +38,7 @@ async function getData(slug: string) {
       "faqs": *[_type == "faq"]{question, answer},
       "cta": *[_type == "ctaBlock"][0]
     },
-    "siteSettings": *[_type == "siteSettings"][0]{
+    "globalSettings": *[_type == "siteSettings"][0]{
       logo,
       partnerLogos,
       euBenefitsHeadline,
@@ -51,15 +51,15 @@ async function getData(slug: string) {
 }
 
 export default async function ToolPage({ params }: any) {
-  const { tool: data, siteSettings } = await getData(params.slug)
+  const { tool: data, globalSettings } = await getData(params.slug)
 
   return (
     <div className="bg-white text-black">
       {/* Header */}
       <header className="w-full border-b px-6 py-4 flex justify-between items-center sticky top-0 bg-white z-50">
         <div className="flex items-center gap-2">
-          {siteSettings.logo && siteSettings.logo.asset && siteSettings.logo.asset.url ? (
-            <img src={siteSettings.logo.asset.url} alt="Logo" className="h-10 object-contain" />
+          {globalSettings.logo && globalSettings.logo.asset && globalSettings.logo.asset.url ? (
+            <img src={globalSettings.logo.asset.url} alt="Logo" className="h-10 object-contain" />
           ) : (
             <span className="text-lg font-bold">Letseuro</span>
           )}
@@ -104,7 +104,7 @@ export default async function ToolPage({ params }: any) {
       <section className="bg-white py-10 px-6 text-center border-y">
         <p className="text-gray-500 mb-6">Trusted by leading teams across Europe</p>
         <div className="flex justify-center gap-8 flex-wrap opacity-60">
-          {siteSettings.partnerLogos && siteSettings.partnerLogos.map((logo: any, i: number) => (
+          {globalSettings.partnerLogos && globalSettings.partnerLogos.map((logo: any, i: number) => (
             <img
               key={i}
               src={logo && logo.asset ? urlFor(logo).width(160).url() : ''}
@@ -175,12 +175,12 @@ export default async function ToolPage({ params }: any) {
       {/* EU Benefits */}
       <section className="py-20 px-6 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
         <div>
-          <h2 className="text-3xl font-semibold mb-4">{siteSettings.euBenefitsHeadline}</h2>
-          <p className="text-lg text-gray-700">{siteSettings.euBenefitsParagraph}</p>
+          <h2 className="text-3xl font-semibold mb-4">{globalSettings.euBenefitsHeadline}</h2>
+          <p className="text-lg text-gray-700">{globalSettings.euBenefitsParagraph}</p>
         </div>
         <div>
-          {siteSettings.euBenefitsImage && siteSettings.euBenefitsImage.asset && (
-            <img src={urlFor(siteSettings.euBenefitsImage).width(600).url()} alt="" className="rounded-xl w-full" />
+          {globalSettings.euBenefitsImage && globalSettings.euBenefitsImage.asset && (
+            <img src={urlFor(globalSettings.euBenefitsImage).width(600).url()} alt="" className="rounded-xl w-full" />
           )}
         </div>
       </section>
@@ -198,14 +198,14 @@ export default async function ToolPage({ params }: any) {
       <footer className="bg-gray-100 text-sm px-6 py-12">
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-center mb-12">
-            {siteSettings.logo && siteSettings.logo.asset && siteSettings.logo.asset.url ? (
-              <img src={siteSettings.logo.asset.url} alt="Logo" className="h-10 object-contain" />
+            {globalSettings.logo && globalSettings.logo.asset && globalSettings.logo.asset.url ? (
+              <img src={globalSettings.logo.asset.url} alt="Logo" className="h-10 object-contain" />
             ) : (
               <span className="text-lg font-bold">Letseuro</span>
             )}
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            {siteSettings.footerColumns && siteSettings.footerColumns.map((column: any, i: number) => (
+            {globalSettings.footerColumns && globalSettings.footerColumns.map((column: any, i: number) => (
               <div key={i}>
                 <h4 className="font-semibold mb-2">{column.title}</h4>
                 <ul className="space-y-1 text-gray-700 text-sm">
