@@ -23,18 +23,22 @@ async function getData(slug: string) {
     "tool": *[_type == "toolPage" && slug.current == $slug][0]{
       heroTitle,
       heroParagraph,
-      description,
       heroImage,
-      toolSpecificSections,
-      enableGlobalSections,
       heroCtaPrimary,
       heroCtaSecondary,
       featuresTitle,
+      featuresSubtitle,
+      features, // ← ensure this line exists
+      comparisonHeadline,
       comparisonTable{
         headline,
         rows,
         bottomText
       },
+      toolSpecificSections,
+      ctaHeadline,
+      ctaSubtext,
+      ctaButtonLabel,
       "testimonials": *[_type == "testimonial"]{quote, author},
       "faqs": *[_type == "faq"]{question, answer},
       "cta": *[_type == "ctaBlock"][0]
@@ -69,7 +73,7 @@ export default async function ToolPage({ params }: any) {
           <a href="#" className="hover:underline">Contact Sales</a>
           <a href="#" className="hover:underline">Sign in</a>
           <a href="#" className="bg-blue-600 text-white px-4 py-2 rounded font-semibold hover:bg-blue-700 text-sm">
-            {data.heroCtaPrimary || 'Get started'}
+            {data.ctaLabel || 'Get started'}
           </a>
         </nav>
       </header>
@@ -77,22 +81,22 @@ export default async function ToolPage({ params }: any) {
       {/* Hero */}
       <section className="py-20 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
         <div>
-          <h1 className="text-5xl font-bold mb-4">{data.heroTitle}</h1>
+          <h1 className="text-5xl font-bold mb-4">{data.title}</h1>
           <p className="text-lg text-gray-700 mb-6">
-            {data.heroParagraph || `Everything you ever wanted to know about ${data.heroTitle}… but analytics never told you.`}
+            {data.introParagraph || `Everything you ever wanted to know about ${data.title}… but analytics never told you.`}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <a href="/signup" className="bg-blue-600 text-white px-6 py-3 rounded font-semibold text-center">
-              {data.heroCtaPrimary || 'Get started'}
+              {data.ctaLabel || 'Get started'}
             </a>
             <a href="/demo" className="border border-blue-600 text-blue-600 px-6 py-3 rounded font-semibold text-center">
-              {data.heroCtaSecondary || 'Book a demo'}
+              Book a demo
             </a>
           </div>
         </div>
         <div>
           {data.heroImage && data.heroImage.asset ? (
-            <img src={urlFor(data.heroImage).width(800).url()} alt={data.heroTitle} className="rounded-xl w-full" />
+            <img src={urlFor(data.heroImage).width(800).url()} alt={data.title} className="rounded-xl w-full" />
           ) : (
             <div className="bg-gray-100 rounded-xl aspect-[16/10] flex items-center justify-center text-gray-400">
               [Hero image]
@@ -118,7 +122,7 @@ export default async function ToolPage({ params }: any) {
 
       {/* Features */}
       <section className="py-20 px-6 max-w-7xl mx-auto">
-        <h2 className="text-3xl font-semibold text-center mb-12">{data.featuresTitle}</h2>
+        <h2 className="text-3xl font-semibold text-center mb-12">Why teams love {data.title}</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {data.features && data.features.map((feature: any, index: number) => (
             <div key={index}>
@@ -136,7 +140,7 @@ export default async function ToolPage({ params }: any) {
       {data.comparisonTable && (
         <section className="py-20 px-6 max-w-6xl mx-auto">
           <h2 className="text-3xl font-semibold text-center mb-8">
-            {data.comparisonHeadline}
+            {data.comparisonTable.headline || 'How we compare'}
           </h2>
           
           <div className="overflow-x-auto">
@@ -144,7 +148,7 @@ export default async function ToolPage({ params }: any) {
               <thead>
                 <tr className="bg-gray-100">
                   <th className="p-4 text-left border">Feature</th>
-                  <th className="p-4 text-center border">{data.heroTitle}</th>
+                  <th className="p-4 text-center border">{data.title}</th>
                   <th className="p-4 text-center border">Competitors</th>
                 </tr>
               </thead>
@@ -188,10 +192,10 @@ export default async function ToolPage({ params }: any) {
 
       {/* CTA */}
       <section className="bg-blue-600 text-white py-20 text-center px-6">
-        <h2 className="text-3xl font-bold mb-4">{data.ctaHeadline}</h2>
-        <p className="text-lg mb-6">{data.ctaSubtext}</p>
+        <h2 className="text-3xl font-bold mb-4">Start exploring your visitors' behavior today</h2>
+        <p className="text-lg mb-6">Try {data.title} free for 14 days — no credit card required.</p>
         <a href="/signup" className="inline-block bg-white text-blue-600 px-6 py-3 rounded font-semibold hover:bg-gray-100">
-          {data.heroCtaPrimary || 'Get started'}
+          {data.ctaLabel || 'Get started'}
         </a>
       </section>
 
