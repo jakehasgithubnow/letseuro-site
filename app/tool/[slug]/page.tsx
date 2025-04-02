@@ -144,20 +144,20 @@ export default async function ToolPage({ params }: any) {
           </h2>
           
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
+            <table className="w-full border-separate border-spacing-y-3">
               <thead>
-                <tr className="bg-gray-100">
-                  <th className="p-4 text-left border">Feature</th>
-                  <th className="p-4 text-center border">{data.heroTitle}</th>
-                  <th className="p-4 text-center border">Competitors</th>
+                <tr className="text-gray-600 text-sm">
+                  <th className="p-4 text-left">Feature</th>
+                  <th className="p-4 text-center font-semibold text-gray-800 bg-gray-50 rounded"> {data.heroTitle} </th>
+                  <th className="p-4 text-center font-semibold text-gray-800 bg-gray-50 rounded">Competitors</th>
                 </tr>
               </thead>
               <tbody>
                 {data.comparisonTable.rows && data.comparisonTable.rows.map((row: any, index: number) => (
-                  <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : ''}>
-                    <td className="p-4 border">{row.feature}</td>
-                    <td className="p-4 text-center border">{row.toolValue}</td>
-                    <td className="p-4 text-center border">{row.competitorValue}</td>
+                  <tr key={index} className="bg-white shadow-sm rounded">
+                    <td className="p-4 align-top text-gray-700">{row.feature}</td>
+                    <td className="p-4 text-center text-gray-900 font-medium">{row.toolValue}</td>
+                    <td className="p-4 text-center text-gray-600">{row.competitorValue}</td>
                   </tr>
                 ))}
               </tbody>
