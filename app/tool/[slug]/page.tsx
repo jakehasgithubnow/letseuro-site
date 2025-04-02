@@ -58,8 +58,8 @@ export default async function ToolPage({ params }: any) {
       {/* Header */}
       <header className="w-full border-b px-6 py-4 flex justify-between items-center sticky top-0 bg-white z-50">
         <div className="flex items-center gap-2">
-          {globalSettings.logo && globalSettings.logo.asset && globalSettings.logo.asset.url ? (
-            <img src={globalSettings.logo.asset.url} alt="Logo" className="h-10 object-contain" />
+          {globalSettings.logo ? (
+            <img src={urlFor(globalSettings.logo).width(160).url()} alt="Logo" className="h-10 object-contain" />
           ) : (
             <span className="text-lg font-bold">Letseuro</span>
           )}
@@ -198,8 +198,8 @@ export default async function ToolPage({ params }: any) {
       <footer className="bg-gray-100 text-sm px-6 py-12">
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-center mb-12">
-            {globalSettings.logo && globalSettings.logo.asset && globalSettings.logo.asset.url ? (
-              <img src={globalSettings.logo.asset.url} alt="Logo" className="h-10 object-contain" />
+            {globalSettings.logo ? (
+              <img src={urlFor(globalSettings.logo).width(160).url()} alt="Logo" className="h-10 object-contain" />
             ) : (
               <span className="text-lg font-bold">Letseuro</span>
             )}
