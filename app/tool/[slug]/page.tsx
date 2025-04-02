@@ -56,7 +56,7 @@ export default async function ToolPage({ params }: any) {
   return (
     <div className="bg-white text-black">
       {/* Header */}
-      <header className="w-full border-b px-6 py-4 flex justify-between items-center sticky top-0 bg-white z-50">
+      <header className="w-full ...">
         <div className="flex items-center gap-2">
           {globalSettings.logo ? (
             <img src={urlFor(globalSettings.logo).width(160).url()} alt="Logo" className="h-10 object-contain" />
@@ -101,7 +101,7 @@ export default async function ToolPage({ params }: any) {
       </section>
 
       {/* Logos */}
-      <section className="bg-white py-10 px-6 text-center border-y">
+      <section className="bg-white py-10 px-6 text-center">
         <p className="text-gray-500 mb-6">Trusted by leading teams across Europe</p>
         <div className="flex justify-center gap-8 flex-wrap opacity-60">
           {globalSettings.partnerLogos && globalSettings.partnerLogos.map((logo: any, i: number) => (
