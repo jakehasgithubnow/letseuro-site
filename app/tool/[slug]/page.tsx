@@ -206,8 +206,13 @@ export default async function ToolPage({ params }: any) {
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {siteSettings.footerColumns && siteSettings.footerColumns.map((column: any, i: number) => (
-              <div key={i} className="prose prose-sm text-gray-700">
-                {column && <PortableText value={[column]} />}
+              <div key={i}>
+                <h4 className="font-semibold mb-2">{column.title}</h4>
+                <ul className="space-y-1 text-gray-700 text-sm">
+                  {column.items?.map((item: string, j: number) => (
+                    <li key={j}>{item}</li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
