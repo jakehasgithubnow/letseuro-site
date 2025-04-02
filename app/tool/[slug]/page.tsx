@@ -56,7 +56,7 @@ export default async function ToolPage({ params }: any) {
   return (
     <div className="bg-white text-black">
       {/* Header */}
-      <header className="w-full ...">
+      <header className="w-full px-8 py-5 flex justify-between items-center sticky top-0 bg-white z-50">
         <div className="flex items-center gap-2">
           {globalSettings.logo ? (
             <img src={urlFor(globalSettings.logo).width(160).url()} alt="Logo" className="h-10 object-contain" />
