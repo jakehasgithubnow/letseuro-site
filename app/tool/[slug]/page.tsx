@@ -109,7 +109,7 @@ export default async function ToolPage({ params }: any) {
               key={i}
               src={logo && logo.asset ? urlFor(logo).width(160).url() : ''}
               alt=""
-              className="h-12 object-contain"
+              className="h-[50px] w-auto object-contain"
             />
           ))}
         </div>
@@ -122,7 +122,7 @@ export default async function ToolPage({ params }: any) {
           {data.features && data.features.map((feature: any, index: number) => (
             <div key={index}>
               {feature.image && feature.image.asset && (
-                <img src={urlFor(feature.image).url()} alt={feature.headline} className="w-full h-48 bg-gray-100 mb-4 rounded" />
+                <img src={urlFor(feature.image).width(600).height(400).url()} alt={feature.headline} className="w-full bg-gray-100 mb-4 rounded" />
               )}
               <h4 className="text-lg font-semibold mb-2">{feature.headline}</h4>
               <p>{feature.paragraph}</p>
