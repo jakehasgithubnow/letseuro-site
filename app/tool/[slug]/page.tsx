@@ -156,8 +156,12 @@ export default async function ToolPage({ params }: any) {
                 {data.comparisonTable.rows && data.comparisonTable.rows.map((row: any, index: number) => (
                   <tr key={index} className="bg-white shadow-sm rounded">
                     <td className="p-4 align-top text-gray-700">{row.feature}</td>
-                    <td className="p-4 text-center text-gray-900 font-medium">{row.toolValue}</td>
-                    <td className="p-4 text-center text-gray-600">{row.competitorValue}</td>
+                    <td className="p-4 text-center text-gray-900 font-medium">
+                      {row.toolValue === true || row.toolValue === "true" ? '✓' : row.toolValue === false || row.toolValue === "false" ? '–' : row.toolValue}
+                    </td>
+                    <td className="p-4 text-center text-gray-600">
+                      {row.competitorValue === true || row.competitorValue === "true" ? '✓' : row.competitorValue === false || row.competitorValue === "false" ? '–' : row.competitorValue}
+                    </td>
                   </tr>
                 ))}
               </tbody>
