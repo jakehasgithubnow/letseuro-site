@@ -142,32 +142,54 @@ export default async function ToolPage({ params }: any) {
           <h2 className="text-3xl font-semibold text-center mb-8">
             {data.comparisonHeadline}
           </h2>
-          
           <div className="overflow-x-auto">
-            <table className="w-full border-separate border-spacing-y-3">
-              <thead>
-                <tr className="text-gray-600 text-sm">
-                  <th className="p-4 text-left">Feature</th>
-                  <th className="p-4 text-center font-semibold text-gray-800 bg-gray-50 rounded"> {data.heroTitle} </th>
-                  <th className="p-4 text-center font-semibold text-gray-800 bg-gray-50 rounded">Competitors</th>
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Feature
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {data.heroTitle}
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Competitors
+                  </th>
                 </tr>
               </thead>
-              <tbody>
-                {data.comparisonTable.rows && data.comparisonTable.rows.map((row: any, index: number) => (
-                  <tr key={index} className="bg-white shadow-sm rounded">
-                    <td className="p-4 align-top text-gray-700">{row.feature}</td>
-                    <td className="p-4 text-center text-gray-900 font-medium">
-                      {row.toolValue === true || row.toolValue === "true" ? '✓' : row.toolValue === false || row.toolValue === "false" ? '–' : row.toolValue}
+              <tbody className="bg-white divide-y divide-gray-200">
+                {data.comparisonTable.rows && data.comparisonTable.rows.map((row, index) => (
+                  <tr key={index}>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-700">
+                      {row.feature}
                     </td>
-                    <td className="p-4 text-center text-gray-600">
-                      {row.competitorValue === true || row.competitorValue === "true" ? '✓' : row.competitorValue === false || row.competitorValue === "false" ? '–' : row.competitorValue}
+                    <td className="px-6 py-4 whitespace-nowrap text-center">
+                      {row.toolValue === true || row.toolValue === "true" ? (
+                        <svg className="w-5 h-5 text-green-500 inline-block" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8.414 15l-4.121-4.121a1 1 0 011.414-1.414L8.414 12.586l7.879-7.879a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      ) : row.toolValue === false || row.toolValue === "false" ? (
+                        <span className="text-gray-400 inline-block">–</span>
+                      ) : (
+                        row.toolValue
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-center">
+                      {row.competitorValue === true || row.competitorValue === "true" ? (
+                        <svg className="w-5 h-5 text-green-500 inline-block" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8.414 15l-4.121-4.121a1 1 0 011.414-1.414L8.414 12.586l7.879-7.879a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      ) : row.competitorValue === false || row.competitorValue === "false" ? (
+                        <span className="text-gray-400 inline-block">–</span>
+                      ) : (
+                        row.competitorValue
+                      )}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          
           {data.comparisonTable.bottomText && (
             <p className="mt-6 text-center text-gray-700">{data.comparisonTable.bottomText}</p>
           )}
