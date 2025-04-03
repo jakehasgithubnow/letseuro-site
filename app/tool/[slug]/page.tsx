@@ -164,25 +164,25 @@ export default async function ToolPage({ params }: any) {
                       {row.feature}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
-                      {row.toolValue === true || row.toolValue === "true" ? (
+                      {row.thisTool === true ? (
                         <svg className="w-5 h-5 text-green-500 inline-block" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8.414 15l-4.121-4.121a1 1 0 011.414-1.414L8.414 12.586l7.879-7.879a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
-                      ) : row.toolValue === false || row.toolValue === "false" ? (
+                      ) : row.thisTool === false ? (
                         <span className="text-gray-400 inline-block">–</span>
                       ) : (
-                        row.toolValue
+                        row.thisTool // Fallback for non-boolean, though schema defines boolean
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
-                      {row.competitorValue === true || row.competitorValue === "true" ? (
+                      {row.competitor === true ? (
                         <svg className="w-5 h-5 text-green-500 inline-block" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8.414 15l-4.121-4.121a1 1 0 011.414-1.414L8.414 12.586l7.879-7.879a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
-                      ) : row.competitorValue === false || row.competitorValue === "false" ? (
+                      ) : row.competitor === false ? (
                         <span className="text-gray-400 inline-block">–</span>
                       ) : (
-                        row.competitorValue
+                        row.competitor // Fallback for non-boolean
                       )}
                     </td>
                   </tr>
