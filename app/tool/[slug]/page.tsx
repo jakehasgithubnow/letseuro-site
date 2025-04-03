@@ -158,7 +158,7 @@ export default async function ToolPage({ params }: any) {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {data.comparisonTable.rows && data.comparisonTable.rows.map((row, index) => (
+                {data.comparisonTable.rows && data.comparisonTable.rows.map((row: any, index: number) => (
                   <tr key={index}>
                     <td className="px-6 py-4 whitespace-nowrap text-gray-700">
                       {row.feature}
