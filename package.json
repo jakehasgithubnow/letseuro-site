@@ -1,37 +1,33 @@
 {
-  "name": "letseuro",
+  "name": "letseuro-site",
+  "version": "0.1.0",
   "private": true,
-  "version": "1.0.0",
-  "main": "package.json",
-  "license": "UNLICENSED",
   "scripts": {
-    "dev": "sanity dev",
-    "start": "sanity start",
-    "build": "sanity build",
-    "deploy": "sanity deploy",
-    "deploy-graphql": "sanity graphql deploy"
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "keywords": [
-    "sanity"
-  ],
   "dependencies": {
-    "@sanity/vision": "^3.81.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "sanity": "^3.81.0",
-    "styled-components": "^6.1.8"
+    "@portabletext/react": "^3.2.1",
+    "@sanity/client": "^6.28.4",
+    "@sanity/image-url": "^1.1.0",
+    "next": "15.2.4",
+    "next-sanity": "^9.9.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@sanity/eslint-config-studio": "^5.0.2",
-    "@types/react": "^18.0.25",
-    "eslint": "^9.9.0",
-    "prettier": "^3.0.2",
-    "typescript": "^5.1.6"
-  },
-  "prettier": {
-    "semi": false,
-    "printWidth": 100,
-    "bracketSpacing": false,
-    "singleQuote": true
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@typescript-eslint/eslint-plugin": "^8.28.0",
+    "@typescript-eslint/parser": "^8.28.0",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.4",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
