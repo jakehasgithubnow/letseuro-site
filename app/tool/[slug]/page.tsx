@@ -35,7 +35,9 @@ async function getData(slug: string) {
       comparisonTable{
         headline,
         rows,
-        bottomText
+        bottomText,
+        competitorHeading,
+        thisToolHeading
       },
       toolSpecificSections,
       ctaHeadline,
