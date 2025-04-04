@@ -9,6 +9,16 @@ const comparisonTable = {
         type: 'string',
       },
       {
+        name: 'competitorHeading',
+        title: 'Competitor Heading',
+        type: 'string',
+      },
+      {
+        name: 'thisToolHeading',
+        title: 'This Tool Heading',
+        type: 'string',
+      },
+      {
         name: 'rows',
         title: 'Rows',
         type: 'array',
