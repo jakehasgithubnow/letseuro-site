@@ -152,10 +152,10 @@ export default async function ToolPage({ params }: any) {
                     Feature
                   </th>
                   <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {data.heroTitle}
+                    {data.comparisonTable.thisToolHeading}
                   </th>
                   <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Competitors
+                    {data.comparisonTable.competitorHeading}
                   </th>
                 </tr>
               </thead>
