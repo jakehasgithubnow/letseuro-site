@@ -4,6 +4,7 @@ import { sanity } from '@/lib/sanity'
 import { PortableText } from '@portabletext/react'
 import imageUrlBuilder from '@sanity/image-url'
 import { createClient } from 'next-sanity'
+import LogoCarousel from './LogoCarousel';
 
 const config = {
   projectId: 'kabpbxao',
@@ -53,14 +54,30 @@ async function getData(slug: string) {
       euBenefitsHeadline,
       euBenefitsParagraph,
       euBenefitsImage,
-      footerColumns
+      footerColumns,
+      "partnerLogoUrls": partnerLogos.asset->url
     }
   }`
-  return await sanity.fetch(query, { slug })
+  console.log('Fetching data from Sanity...');
+  try {
+    const data = await sanity.fetch(query, { slug });
+    
+    return {
+      tool: data.tool,
+      globalSettings: data.globalSettings,
+    };
+  } catch (error) {
+    console.error('Error fetching data from Sanity:', error);
+    return { tool: null, globalSettings: null };
+  }
 }
 
-export default async function ToolPage({ params }: any) {
-  const { tool: data, globalSettings } = await getData(params.slug)
+export default async function ToolPage({ params }: { params: { slug: string } }) {
+  const { tool: data, globalSettings } = await getData(params.slug);
+
+  if (!data || !globalSettings) {
+    return <div>Error: Could not load data for this page.</div>;
+  }
 
   return (
     <div className="bg-white text-black">
@@ -112,15 +129,8 @@ export default async function ToolPage({ params }: any) {
       {/* Logos */}
       <section className="bg-white py-10 px-6 text-center">
         <p className="text-gray-500 mb-6">Trusted by leading teams across Europe</p>
-        <div className="flex justify-center gap-8 flex-wrap opacity-60">
-          {globalSettings.partnerLogos && globalSettings.partnerLogos.map((logo: any, i: number) => (
-            <img
-              key={i}
-              src={logo && logo.asset ? urlFor(logo).width(160).url() : ''}
-              alt=""
-              className="h-[50px] w-auto object-contain"
-            />
-          ))}
+        <div className="max-w-6xl mx-auto">
+          <LogoCarousel logos={globalSettings.partnerLogos || []} />
         </div>
       </section>
 
@@ -254,7 +264,7 @@ export default async function ToolPage({ params }: any) {
         </div>
       </footer>
     </div>
-  )
+  );
 }
 
 //this is a test - local matches github
