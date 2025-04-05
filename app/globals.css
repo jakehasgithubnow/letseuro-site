@@ -5,6 +5,13 @@
   --foreground: #171717;
 }
 
+@media (max-width: 768px) {
+  .hide-on-mobile {
+    display: none;
+  }
+  /* Add more mobile-specific styles here if needed */
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

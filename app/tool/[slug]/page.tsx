@@ -91,8 +91,8 @@ export default async function ToolPage({ params }: { params: { slug: string } })
           )}
         </div>
         <nav className="flex gap-6 text-sm items-center">
-          <a href="#" className="hover:underline">Contact Sales</a>
-          <a href="#" className="hover:underline">Sign in</a>
+          <a href="#" className="hover:underline hide-on-mobile">Contact Sales</a>
+          <a href="#" className="hover:underline hide-on-mobile">Sign in</a>
           <a href="#" className="bg-blue-600 text-white px-4 py-2 rounded font-semibold hover:bg-blue-700 text-sm">
             {data.heroCtaPrimary || 'Get started'}
           </a>
@@ -127,8 +127,8 @@ export default async function ToolPage({ params }: { params: { slug: string } })
       </section>
 
       {/* Logos */}
-      <section className="bg-white py-10 px-6 text-center">
-        <p className="text-gray-500 mb-6">Trusted by leading teams across Europe</p>
+      <section className="bg-white py-2 md:py-5 px-6 text-center">
+        <p className="text-gray-500 mb-1 md:mb-3">Trusted by leading teams across Europe</p>
         <div className="max-w-6xl mx-auto">
           <LogoCarousel logos={globalSettings.partnerLogos || []} />
         </div>
