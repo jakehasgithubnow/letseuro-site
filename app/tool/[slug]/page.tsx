@@ -1,4 +1,4 @@
-//test- Does this line appear in vscode
+// test- Does this line appear in vscode
 
 import { sanity } from '@/lib/sanity'
 import { PortableText } from '@portabletext/react'
@@ -155,17 +155,17 @@ export default async function ToolPage({ params }: { params: { slug: string } })
         <h2 className="text-3xl font-semibold text-center mb-8">
             {data.comparisonHeadline}
         </h2>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
+        <div className="overflow-x-auto w-full">
+          <table className="min-w-full divide-y divide-gray-200 ">
             <thead className="bg-gray-50">
               <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" className="px-0 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider break-words">
                   Feature
                 </th>
-                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" className="px-0 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                   {data.comparisonTable?.thisToolHeading}
                 </th>
-                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" className="px-0 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                   {data.comparisonTable?.competitorHeading}
                 </th>
               </tr>
@@ -174,10 +174,10 @@ export default async function ToolPage({ params }: { params: { slug: string } })
               {/* Add optional chaining to safely access rows */}
               {data.comparisonTable?.rows?.map((row: any, index: number) => (
                 <tr key={index}>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-700">
+                  <td className="px-0 py-4 text-gray-700 break-words">
                     {row.feature}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-center">
+                  <td className="px-0 py-4 text-center">
                     {row.thisTool === true ? (
                       <svg className="w-5 h-5 text-green-500 inline-block" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8.414 15l-4.121-4.121a1 1 0 011.414-1.414L8.414 12.586l7.879-7.879a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -185,10 +185,10 @@ export default async function ToolPage({ params }: { params: { slug: string } })
                     ) : row.thisTool === false ? (
                       <span className="text-gray-400 inline-block">–</span>
                     ) : (
-                      row.thisTool // Fallback for non-boolean, though schema defines boolean
+                      row.thisTool // Fallback for non-boolean
                     )}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-center">
+                  <td className="px-0 py-4 text-center">
                     {row.competitor === true ? (
                       <svg className="w-5 h-5 text-green-500 inline-block" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8.414 15l-4.121-4.121a1 1 0 011.414-1.414L8.414 12.586l7.879-7.879a1 1 0 011.414 0z" clipRule="evenodd" />
