@@ -6,6 +6,12 @@ import imageUrlBuilder from '@sanity/image-url'
 import { createClient } from 'next-sanity'
 import LogoCarousel from './LogoCarousel';
 
+// Define the standard PageProps type for Next.js App Router pages
+type PageProps = {
+  params: { slug: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
+
 const config = {
   projectId: 'kabpbxao',
   dataset: 'production',
@@ -72,7 +78,8 @@ async function getData(slug: string) {
   }
 }
 
-export default async function ToolPage({ params }: { params: { slug: string } }) {
+// Update the function signature to use the defined PageProps type
+export default async function ToolPage({ params }: PageProps) {
   const { tool: data, globalSettings } = await getData(params.slug);
 
   if (!data || !globalSettings) {
@@ -151,64 +158,62 @@ export default async function ToolPage({ params }: { params: { slug: string } })
       </section>
 
       {/* Comparison Section */}
-      {data.comparisonTable && (
-        <section className="py-20 px-6 max-w-6xl mx-auto">
-          <h2 className="text-3xl font-semibold text-center mb-8">
+      <section className="py-20 px-6 max-w-6xl mx-auto">
+        <h2 className="text-3xl font-semibold text-center mb-8">
             {data.comparisonHeadline}
-          </h2>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Feature
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {data.comparisonTable?.thisToolHeading}
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {data.comparisonTable?.competitorHeading}
-                  </th>
+        </h2>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Feature
+                </th>
+                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  {data.comparisonTable?.thisToolHeading}
+                </th>
+                <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  {data.comparisonTable?.competitorHeading}
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {data.comparisonTable.rows && data.comparisonTable.rows.map((row: any, index: number) => (
+                <tr key={index}>
+                  <td className="px-6 py-4 whitespace-nowrap text-gray-700">
+                    {row.feature}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-center">
+                    {row.thisTool === true ? (
+                      <svg className="w-5 h-5 text-green-500 inline-block" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8.414 15l-4.121-4.121a1 1 0 011.414-1.414L8.414 12.586l7.879-7.879a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    ) : row.thisTool === false ? (
+                      <span className="text-gray-400 inline-block">–</span>
+                    ) : (
+                      row.thisTool // Fallback for non-boolean, though schema defines boolean
+                    )}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-center">
+                    {row.competitor === true ? (
+                      <svg className="w-5 h-5 text-green-500 inline-block" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8.414 15l-4.121-4.121a1 1 0 011.414-1.414L8.414 12.586l7.879-7.879a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    ) : row.competitor === false ? (
+                      <span className="text-gray-400 inline-block">–</span>
+                    ) : (
+                      row.competitor // Fallback for non-boolean
+                    )}
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {data.comparisonTable.rows && data.comparisonTable.rows.map((row: any, index: number) => (
-                  <tr key={index}>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-700">
-                      {row.feature}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center">
-                      {row.thisTool === true ? (
-                        <svg className="w-5 h-5 text-green-500 inline-block" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8.414 15l-4.121-4.121a1 1 0 011.414-1.414L8.414 12.586l7.879-7.879a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      ) : row.thisTool === false ? (
-                        <span className="text-gray-400 inline-block">–</span>
-                      ) : (
-                        row.thisTool // Fallback for non-boolean, though schema defines boolean
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center">
-                      {row.competitor === true ? (
-                        <svg className="w-5 h-5 text-green-500 inline-block" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8.414 15l-4.121-4.121a1 1 0 011.414-1.414L8.414 12.586l7.879-7.879a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      ) : row.competitor === false ? (
-                        <span className="text-gray-400 inline-block">–</span>
-                      ) : (
-                        row.competitor // Fallback for non-boolean
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          {data.comparisonTable.bottomText && (
-            <p className="mt-6 text-center text-gray-700">{data.comparisonTable.bottomText}</p>
-          )}
-        </section>
-      )}
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {data.comparisonTable.bottomText && (
+          <p className="mt-6 text-center text-gray-700">{data.comparisonTable.bottomText}</p>
+        )}
+      </section>
 
       {/* Tool-Specific Content */}
       <section className="px-6 py-20 max-w-5xl mx-auto">
@@ -233,18 +238,18 @@ export default async function ToolPage({ params }: { params: { slug: string } })
       {/* CTA */}
       <section className="bg-blue-600 text-white py-20 text-center px-6">
         <h2 className="text-3xl font-bold mb-4">{data.ctaHeadline}</h2>
-        <p className="text-lg mb-6">{data.ctaSubtext}</p>
-        <a href="/signup" className="inline-block bg-white text-blue-600 px-6 py-3 rounded font-semibold hover:bg-gray-100">
-          {data.ctaButtonLabel}
-        </a>
-      </section>
+          <p className="text-lg mb-6">{data.ctaSubtext}</p>
+          <a href="/signup" className="inline-block bg-white text-blue-600 px-6 py-3 rounded font-semibold hover:bg-gray-100">
+            {data.ctaButtonLabel}
+          </a>
+        </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-100 text-sm px-6 py-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex justify-between items-center mb-12">
-            {globalSettings.logo ? (
-              <img src={urlFor(globalSettings.logo).width(160).url()} alt="Logo" className="h-10 object-contain" />
+        {/* Footer */}
+        <footer className="bg-gray-100 text-sm px-6 py-12">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex justify-between items-center mb-12">
+              {globalSettings.logo ? (
+                <img src={urlFor(globalSettings.logo).width(160).url()} alt="Logo" className="h-10 object-contain" />
             ) : (
               <span className="text-lg font-bold">Letseuro</span>
             )}
