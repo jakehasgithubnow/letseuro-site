@@ -1,16 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { GeistSans, GeistMono } from "geist/font"; // Updated import path, removed aliases as they are no longer needed
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// The fonts are now objects, not functions to call
+// const geistSans = Geist({ ... }); // Remove this
+// const geistMono = Geist_Mono({ ... }); // Remove this
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,8 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      {/* Use the variable properties directly from the imported objects */}
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}
       >
         {children}
       </body>

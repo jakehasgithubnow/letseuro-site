@@ -6,12 +6,6 @@ import imageUrlBuilder from '@sanity/image-url'
 import { createClient } from 'next-sanity'
 import LogoCarousel from './LogoCarousel';
 
-// Define the standard PageProps type for Next.js App Router pages
-type PageProps = {
-  params: { slug: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-};
-
 const config = {
   projectId: 'kabpbxao',
   dataset: 'production',
@@ -67,7 +61,7 @@ async function getData(slug: string) {
   console.log('Fetching data from Sanity...');
   try {
     const data = await sanity.fetch(query, { slug });
-    
+
     return {
       tool: data.tool,
       globalSettings: data.globalSettings,
@@ -78,8 +72,7 @@ async function getData(slug: string) {
   }
 }
 
-// Update the function signature to use the defined PageProps type
-export default async function ToolPage({ params }: PageProps) {
+export default async function ToolPage({ params }: { params: { slug: string } }) {
   const { tool: data, globalSettings } = await getData(params.slug);
 
   if (!data || !globalSettings) {
@@ -178,7 +171,8 @@ export default async function ToolPage({ params }: PageProps) {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {data.comparisonTable.rows && data.comparisonTable.rows.map((row: any, index: number) => (
+              {/* Add optional chaining to safely access rows */}
+              {data.comparisonTable?.rows?.map((row: any, index: number) => (
                 <tr key={index}>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-700">
                     {row.feature}
@@ -210,7 +204,7 @@ export default async function ToolPage({ params }: PageProps) {
             </tbody>
           </table>
         </div>
-        {data.comparisonTable.bottomText && (
+        {data.comparisonTable?.bottomText && ( /* Also added optional chaining here for safety */
           <p className="mt-6 text-center text-gray-700">{data.comparisonTable.bottomText}</p>
         )}
       </section>
