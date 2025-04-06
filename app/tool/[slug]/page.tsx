@@ -37,6 +37,12 @@ async function getData(slug: string) {
         competitorHeading,
         thisToolHeading
       },
+      demoPitch {
+        headline,
+        subtext,
+        image1,
+        image2
+      },
       toolSpecificSections,
       ctaHeadline,
       ctaSubtext,
@@ -240,6 +246,51 @@ export default async function ToolPage({ params }: { params: { slug: string } })
           <p className="mt-6 text-center text-gray-700">{finalComparisonBottomText}</p>
         )}
       </section>
+
+      {/* Demo Pitch Section - Updated */}
+      {data.demoPitch && (data.demoPitch.image1 || data.demoPitch.image2 || data.demoPitch.headline) && (
+        <section className="py-20 px-6 max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8 items-stretch"> {/* Use items-stretch */}
+            {/* Image 1 (Larger) */}
+            <div className="md:col-span-2">
+              {data.demoPitch.image1?.asset ? (
+                <img
+                  src={urlFor(data.demoPitch.image1).width(1000).url()}
+                  alt={replacePlaceholders(data.demoPitch.headline, thisTool, competitorTool) || 'Demo image 1'}
+                  className="rounded-3xl w-full h-full object-cover aspect-video md:aspect-[16/10]" // Ensure full height and cover
+                />
+              ) : (
+                <div className="bg-gray-100 rounded-3xl aspect-video md:aspect-[16/10] flex items-center justify-center text-gray-400 h-full">
+                  [Image 1 Placeholder]
+                </div>
+              )}
+            </div>
+
+            {/* Image 2 and Text/CTA */}
+            <div className="flex flex-col justify-between"> {/* Removed h-full, let content define height */}
+              {data.demoPitch.image2?.asset ? (
+                <img
+                  src={urlFor(data.demoPitch.image2).width(600).url()}
+                  alt={replacePlaceholders(data.demoPitch.headline, thisTool, competitorTool) || 'Demo image 2'}
+                  className="rounded-3xl w-full object-cover aspect-video md:aspect-[4/3] mb-6" // Adjusted aspect ratio
+                />
+              ) : (
+                <div className="bg-gray-100 rounded-3xl aspect-video md:aspect-[4/3] flex items-center justify-center text-gray-400 mb-6">
+                  [Image 2 Placeholder]
+                </div>
+              )}
+              <div className="text-left">
+                <h3 className="text-xl font-semibold mb-2">{replacePlaceholders(data.demoPitch.headline, thisTool, competitorTool)}</h3>
+                <p className="text-gray-600 mb-4">{replacePlaceholders(data.demoPitch.subtext, thisTool, competitorTool)}</p>
+                <a href="/demo" className="inline-block bg-blue-600 text-white px-5 py-2.5 rounded font-semibold hover:bg-blue-700 text-sm">
+                  {data.heroCtaPrimary || 'Book a demo'} {/* Reusing Hero CTA Primary */}
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+      {/* End Demo Pitch Section */}
 
       {/* Tool-Specific Content */}
       <section className="px-6 py-20 max-w-5xl mx-auto">
