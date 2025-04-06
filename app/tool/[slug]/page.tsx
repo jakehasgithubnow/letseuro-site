@@ -29,9 +29,6 @@ async function getData(slug: string) {
       heroImage,
       heroCtaPrimary,
       heroCtaSecondary,
-      featuresTitle,
-      featuresSubtitle,
-      features, // ← ensure this line exists
       comparisonHeadline,
       comparisonTable{
         headline,
@@ -54,13 +51,20 @@ async function getData(slug: string) {
       euBenefitsHeadline,
       euBenefitsParagraph,
       euBenefitsImage,
+      featuresTitle,
+      featuresSubtitle,
+      features,
       footerColumns,
       "partnerLogoUrls": partnerLogos.asset->url
     }
   }`
   console.log('Fetching data from Sanity...');
   try {
-    const data = await sanity.fetch(query, { slug });
+    // Add { cache: 'no-store' } to bypass CDN and Next.js cache
+    const data = await sanity.fetch(query, { slug }, { cache: 'no-store' });
+
+    // Log the fetched data structure within getData before returning
+    console.log('getData fetched data:', JSON.stringify(data, null, 2));
 
     return {
       tool: data.tool,
@@ -78,6 +82,8 @@ export default async function ToolPage({ params }: { params: { slug: string } })
   if (!data || !globalSettings) {
     return <div>Error: Could not load data for this page.</div>;
   }
+
+  // Removed console.log from component body
 
   return (
     <div className="bg-white text-black">
@@ -136,9 +142,10 @@ export default async function ToolPage({ params }: { params: { slug: string } })
 
       {/* Features */}
       <section className="py-20 px-6 max-w-7xl mx-auto">
-        <h2 className="text-3xl font-semibold text-center mb-12">{data.featuresTitle}</h2>
+        <h2 className="text-3xl font-semibold text-center mb-12">{globalSettings.featuresTitle}</h2>
         <div className="grid md:grid-cols-3 gap-8">
-          {data.features && data.features.map((feature: any, index: number) => (
+          {/* Removed console.log from JSX */}
+          {globalSettings.features && globalSettings.features.map((feature: any, index: number) => (
             <div key={index}>
               {feature.image && feature.image.asset && (
                 <img src={urlFor(feature.image).width(600).height(400).url()} alt={feature.headline} className="w-full bg-gray-100 mb-4 rounded" />
@@ -251,6 +258,7 @@ export default async function ToolPage({ params }: { params: { slug: string } })
           <div className="grid md:grid-cols-3 gap-8">
             {globalSettings.footerColumns && globalSettings.footerColumns.map((column: any, i: number) => (
               <div key={i}>
+
                 <h4 className="font-semibold mb-2">{column.title}</h4>
                 <ul className="space-y-1 text-gray-700 text-sm">
                   {column.items?.map((item: string, j: number) => (

@@ -34,6 +34,22 @@ export default defineType({
       options: { hotspot: true },
     },
     {
+      name: 'featuresTitle',
+      title: 'Features Section Title',
+      type: 'string',
+    },
+    {
+      name: 'featuresSubtitle',
+      title: 'Features Section Subtitle',
+      type: 'text',
+    },
+    {
+      name: 'features',
+      title: 'Features',
+      type: 'array',
+      of: [{ type: 'feature' }],
+    },
+    {
       name: 'footerColumns',
       title: 'Footer Columns',
       type: 'array',
