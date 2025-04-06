@@ -76,6 +76,20 @@ async function getData(slug: string) {
   }
 }
 
+// Helper function to replace placeholders
+function replacePlaceholders(text: string | undefined | null, thisTool?: string, competitorTool?: string): string {
+  if (!text) return '';
+  let result = text;
+  if (thisTool) {
+    result = result.replace(/%THIS_TOOL%/g, thisTool); // Use regex with 'g' flag for global replacement
+  }
+  if (competitorTool) {
+    result = result.replace(/%COMPETITOR_TOOL%/g, competitorTool);
+  }
+  return result;
+}
+
+
 export default async function ToolPage({ params }: { params: { slug: string } }) {
   const { tool: data, globalSettings } = await getData(params.slug);
 
@@ -83,7 +97,18 @@ export default async function ToolPage({ params }: { params: { slug: string } })
     return <div>Error: Could not load data for this page.</div>;
   }
 
-  // Removed console.log from component body
+  // Get tool names for replacement
+  const thisTool = data.comparisonTable?.thisToolHeading;
+  const competitorTool = data.comparisonTable?.competitorHeading;
+
+  // Apply replacements
+  const finalHeroTitle = replacePlaceholders(data.heroTitle, thisTool, competitorTool);
+  const finalHeroParagraph = replacePlaceholders(data.heroParagraph, thisTool, competitorTool);
+  const finalComparisonHeadline = replacePlaceholders(data.comparisonHeadline, thisTool, competitorTool);
+  const finalComparisonBottomText = replacePlaceholders(data.comparisonTable?.bottomText, thisTool, competitorTool);
+  const finalCtaHeadline = replacePlaceholders(data.ctaHeadline, thisTool, competitorTool);
+  const finalCtaSubtext = replacePlaceholders(data.ctaSubtext, thisTool, competitorTool);
+  // Note: Portable Text (toolSpecificSections) needs separate handling if placeholders are used there.
 
   return (
     <div className="bg-white text-black">
@@ -108,9 +133,9 @@ export default async function ToolPage({ params }: { params: { slug: string } })
       {/* Hero */}
       <section className="py-20 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
         <div>
-          <h1 className="text-5xl font-bold mb-4">{data.heroTitle}</h1>
+          <h1 className="text-5xl font-bold mb-4">{finalHeroTitle}</h1>
           <p className="text-lg text-gray-700 mb-6">
-            {data.heroParagraph || `Everything you ever wanted to know about ${data.heroTitle}… but analytics never told you.`}
+            {finalHeroParagraph || `Everything you ever wanted to know about ${finalHeroTitle}… but analytics never told you.`}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <a href="/signup" className="bg-blue-600 text-white px-6 py-3 rounded font-semibold text-center">
@@ -160,7 +185,7 @@ export default async function ToolPage({ params }: { params: { slug: string } })
       {/* Comparison Section */}
       <section className="py-20 px-6 max-w-6xl mx-auto">
         <h2 className="text-3xl font-semibold text-center mb-8">
-            {data.comparisonHeadline}
+            {finalComparisonHeadline}
         </h2>
         <div className="overflow-x-auto w-full">
           <table className="min-w-full divide-y divide-gray-200 ">
@@ -211,8 +236,8 @@ export default async function ToolPage({ params }: { params: { slug: string } })
             </tbody>
           </table>
         </div>
-        {data.comparisonTable?.bottomText && ( /* Also added optional chaining here for safety */
-          <p className="mt-6 text-center text-gray-700">{data.comparisonTable.bottomText}</p>
+        {finalComparisonBottomText && ( /* Also added optional chaining here for safety */
+          <p className="mt-6 text-center text-gray-700">{finalComparisonBottomText}</p>
         )}
       </section>
 
@@ -238,8 +263,8 @@ export default async function ToolPage({ params }: { params: { slug: string } })
 
       {/* CTA */}
       <section className="bg-blue-600 text-white py-20 text-center px-6">
-        <h2 className="text-3xl font-bold mb-4">{data.ctaHeadline}</h2>
-          <p className="text-lg mb-6">{data.ctaSubtext}</p>
+        <h2 className="text-3xl font-bold mb-4">{finalCtaHeadline}</h2>
+          <p className="text-lg mb-6">{finalCtaSubtext}</p>
           <a href="/signup" className="inline-block bg-white text-blue-600 px-6 py-3 rounded font-semibold hover:bg-gray-100">
             {data.ctaButtonLabel}
           </a>
