@@ -25,32 +25,32 @@ export async function generateStaticParams() {
 async function getData(slug: string) {
   const query = `{
     "tool": *[_type == "toolPage" && slug.current == $slug][0]{
-      heroTitle,
+      // heroTitle, // Moved to globalSettings
       heroParagraph,
       heroImage,
-      heroCtaPrimary,
-      heroCtaSecondary,
-      comparisonHeadline,
+      // heroCtaPrimary, // Moved to globalSettings
+      // heroCtaSecondary, // Moved to globalSettings
+      // comparisonHeadline, // Moved to globalSettings
       comparisonTable{
-        headline,
+        headline, // Keep tool-specific headline if needed, or remove if fully global
         rows,
-        bottomText,
+        // bottomText, // Moved to globalSettings
         competitorHeading,
         thisToolHeading
       },
       demoPitch {
-        headline,
-        subtext,
+        // headline, // Moved to globalSettings
+        // subtext, // Moved to globalSettings
         image1,
-        image2
+        // image2 // Moved to globalSettings
       },
       toolSpecificSections,
-      ctaHeadline,
-      ctaSubtext,
-      ctaButtonLabel,
-      "testimonials": *[_type == "testimonial"]{quote, author},
-      "faqs": *[_type == "faq"]{question, answer},
-      "cta": *[_type == "ctaBlock"][0]
+      // ctaHeadline, // Moved to globalSettings
+      // ctaSubtext, // Moved to globalSettings
+      // ctaButtonLabel, // Moved to globalSettings
+      "testimonials": *[_type == "testimonial"]{quote, author}, // Assuming these remain tool-specific or fetched separately
+      "faqs": *[_type == "faq"]{question, answer}, // Assuming these remain tool-specific or fetched separately
+      "cta": *[_type == "ctaBlock"][0] // Assuming this remains tool-specific or fetched separately
     },
     "globalSettings": *[_type == "siteSettings"][0]{
       logo,
@@ -58,11 +58,23 @@ async function getData(slug: string) {
       euBenefitsHeadline,
       euBenefitsParagraph,
       euBenefitsImage,
-      featuresTitle,
-      featuresSubtitle,
-      features,
+      featuresTitle, // Assuming these are global now
+      featuresSubtitle, // Assuming these are global now
+      features, // Assuming these are global now
       footerColumns,
-      "partnerLogoUrls": partnerLogos.asset->url
+      "partnerLogoUrls": partnerLogos.asset->url,
+      // Added global fields
+      heroTitle,
+      heroCtaPrimary,
+      heroCtaSecondary,
+      comparisonHeadline,
+      comparisonTableBottomText,
+      demoPitchImage2,
+      demoPitchHeadline,
+      demoPitchSubtext,
+      ctaFooterHeadline,
+      ctaFooterSubtext,
+      ctaFooterButtonLabel
     }
   }`
   console.log('Fetching data from Sanity...');
@@ -166,16 +178,16 @@ export default async function ToolPage({ params }: { params: { slug: string } })
   const thisTool = data.comparisonTable?.thisToolHeading || ''; // Fallback to empty string
   const competitorTool = data.comparisonTable?.competitorHeading || ''; // Fallback to empty string
 
-  // Apply replacements
-  const finalHeroTitle = replacePlaceholders(data.heroTitle, thisTool, competitorTool);
-  const finalHeroParagraph = replacePlaceholders(data.heroParagraph, thisTool, competitorTool);
-  const finalComparisonHeadline = replacePlaceholders(data.comparisonHeadline, thisTool, competitorTool);
-  const finalComparisonBottomText = replacePlaceholders(data.comparisonTable?.bottomText, thisTool, competitorTool);
-  const finalCtaHeadline = replacePlaceholders(data.ctaHeadline, thisTool, competitorTool);
-  const finalCtaSubtext = replacePlaceholders(data.ctaSubtext, thisTool, competitorTool);
-  // Demo Pitch replacements (keep existing)
-  const finalDemoPitchHeadline = replacePlaceholders(data.demoPitch?.headline, thisTool, competitorTool);
-  const finalDemoPitchSubtext = replacePlaceholders(data.demoPitch?.subtext, thisTool, competitorTool);
+  // Apply replacements using globalSettings where applicable
+  const finalHeroTitle = replacePlaceholders(globalSettings.heroTitle, thisTool, competitorTool); // Use globalSettings
+  const finalHeroParagraph = replacePlaceholders(data.heroParagraph, thisTool, competitorTool); // Keep tool data
+  const finalComparisonHeadline = replacePlaceholders(globalSettings.comparisonHeadline, thisTool, competitorTool); // Use globalSettings
+  const finalComparisonBottomText = replacePlaceholders(globalSettings.comparisonTableBottomText, thisTool, competitorTool); // Use globalSettings
+  const finalCtaHeadline = replacePlaceholders(globalSettings.ctaFooterHeadline, thisTool, competitorTool); // Use globalSettings
+  const finalCtaSubtext = replacePlaceholders(globalSettings.ctaFooterSubtext, thisTool, competitorTool); // Use globalSettings
+  // Demo Pitch replacements (use globalSettings)
+  const finalDemoPitchHeadline = replacePlaceholders(globalSettings.demoPitchHeadline, thisTool, competitorTool); // Use globalSettings
+  const finalDemoPitchSubtext = replacePlaceholders(globalSettings.demoPitchSubtext, thisTool, competitorTool); // Use globalSettings
 
 
   // --- NEW: Define Portable Text components ---
@@ -243,7 +255,7 @@ export default async function ToolPage({ params }: { params: { slug: string } })
           <a href="#" className="hover:underline hide-on-mobile">Contact Sales</a>
           <a href="#" className="hover:underline hide-on-mobile">Sign in</a>
           <a href="#" className="bg-blue-600 text-white px-4 py-2 rounded font-semibold hover:bg-blue-700 text-sm">
-            {data.heroCtaPrimary || 'Get started'}
+            {globalSettings.heroCtaPrimary || 'Get started'} {/* Use globalSettings */}
           </a>
         </nav>
       </header>
@@ -257,10 +269,10 @@ export default async function ToolPage({ params }: { params: { slug: string } })
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <a href="/signup" className="bg-blue-600 text-white px-6 py-3 rounded font-semibold text-center">
-              {data.heroCtaPrimary || 'Get started'}
+              {globalSettings.heroCtaPrimary || 'Get started'} {/* Use globalSettings */}
             </a>
             <a href="/demo" className="border border-blue-600 text-blue-600 px-6 py-3 rounded font-semibold text-center">
-              {data.heroCtaSecondary || 'Book a demo'}
+              {globalSettings.heroCtaSecondary || 'Book a demo'} {/* Use globalSettings */}
             </a>
           </div>
         </div>
@@ -354,21 +366,22 @@ export default async function ToolPage({ params }: { params: { slug: string } })
             </tbody>
           </table>
         </div>
-        {finalComparisonBottomText && ( /* Also added optional chaining here for safety */
+        {finalComparisonBottomText && (
           <p className="mt-6 text-center text-gray-700">{finalComparisonBottomText}</p>
         )}
       </section>
 
       {/* Demo Pitch Section - Updated */}
-      {data.demoPitch && (data.demoPitch.image1 || data.demoPitch.image2 || data.demoPitch.headline) && (
+      {/* Demo Pitch Section - Updated */}
+      {data.demoPitch?.image1 && (
         <section className="py-20 px-6 max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8 items-stretch"> {/* Use items-stretch */}
-            {/* Image 1 (Larger) */}
+          <div className="grid md:grid-cols-3 gap-8 items-stretch">
+            {/* Image 1 (Larger) - Remains from tool data */}
             <div className="md:col-span-2">
               {data.demoPitch.image1?.asset ? (
                 <img
                   src={urlFor(data.demoPitch.image1).width(1000).url()}
-                  alt={finalDemoPitchHeadline || 'Demo image 1'} // Use final variable
+                  alt="Demo image 1"
                   className="rounded-3xl w-full h-full object-cover aspect-video md:aspect-[16/10]"
                 />
               ) : (
@@ -378,24 +391,13 @@ export default async function ToolPage({ params }: { params: { slug: string } })
               )}
             </div>
 
-            {/* Image 2 and Text/CTA */}
-            <div className="flex flex-col justify-between"> {/* Removed h-full, let content define height */}
-              {data.demoPitch.image2?.asset ? (
-                <img
-                  src={urlFor(data.demoPitch.image2).width(600).url()}
-                  alt={finalDemoPitchHeadline || 'Demo image 2'} // Use final variable
-                  className="rounded-3xl w-full object-cover aspect-video md:aspect-[4/3] mb-6"
-                />
-              ) : (
-                <div className="bg-gray-100 rounded-3xl aspect-video md:aspect-[4/3] flex items-center justify-center text-gray-400 mb-6">
-                  [Image 2 Placeholder]
-                </div>
-              )}
+            {/* Text/CTA */}
+            <div className="flex flex-col justify-between">
               <div className="text-center">
-                <h3 className="text-xl font-semibold mb-2">{finalDemoPitchHeadline}</h3> {/* Use final variable */}
-                <p className="text-gray-600 mb-4">{finalDemoPitchSubtext}</p> {/* Use final variable */}
+                <h3 className="text-xl font-semibold mb-2">{globalSettings.demoPitchHeadline}</h3>
+                <p className="text-gray-600 mb-4">{globalSettings.demoPitchSubtext}</p>
                 <a href="/demo" className="inline-block bg-blue-600 text-white px-5 py-2.5 rounded font-semibold hover:bg-blue-700 text-sm">
-                  {data.heroCtaPrimary || 'Book a demo'} {/* Reusing Hero CTA Primary */}
+                  {globalSettings.heroCtaPrimary || 'Book a demo'}
                 </a>
               </div>
             </div>
@@ -428,10 +430,10 @@ export default async function ToolPage({ params }: { params: { slug: string } })
 
       {/* CTA */}
       <section className="bg-blue-600 text-white py-20 text-center px-6">
-        <h2 className="text-3xl font-bold mb-4">{finalCtaHeadline}</h2>
-          <p className="text-lg mb-6">{finalCtaSubtext}</p>
+        <h2 className="text-3xl font-bold mb-4">{finalCtaHeadline}</h2> {/* Already uses final variable derived from globalSettings */}
+          <p className="text-lg mb-6">{finalCtaSubtext}</p> {/* Already uses final variable derived from globalSettings */}
           <a href="/signup" className="inline-block bg-white text-blue-600 px-6 py-3 rounded font-semibold hover:bg-gray-100">
-            {data.ctaButtonLabel}
+            {globalSettings.ctaFooterButtonLabel} {/* Use globalSettings */}
           </a>
         </section>
 
