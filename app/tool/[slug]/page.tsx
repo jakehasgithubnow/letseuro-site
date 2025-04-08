@@ -67,8 +67,8 @@ async function getData(slug: string) {
   }`
   console.log('Fetching data from Sanity...');
   try {
-    // Add { cache: 'no-store' } to bypass CDN and Next.js cache
-    const data = await sanity.fetch(query, { slug }, { cache: 'no-store' });
+    // Fetch data using default caching (suitable for SSG)
+    const data = await sanity.fetch(query, { slug });
 
     // Log the fetched data structure within getData before returning
     console.log('getData fetched data:', JSON.stringify(data, null, 2));
